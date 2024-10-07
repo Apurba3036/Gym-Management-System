@@ -165,6 +165,26 @@ async function run() {
             res.send(result);
         })
 
+        
+app.get('/singlepackage/:id', async (req, res) => {
+    const { id } = req.params;  // Get the ID from the request parameters
+
+    try {
+        // Ensure the ID is a valid MongoDB ObjectId
+        const package = await PackagesCollection.findOne({ _id: new ObjectId(id) });
+
+        if (!package) {
+            return res.status(404).json({ message: 'Package not found' });
+        }
+
+        // Send the package data back to the client
+        res.status(200).json(package);
+    } catch (error) {
+        console.error('Error fetching package data:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
         // GET ALL PACKAGES
         app.get('/Packages', async (req, res) => {
             const query = { status: 'approved' };
@@ -208,6 +228,45 @@ async function run() {
             res.send(result);
         })
 
+        app.put('/update-package-admin/:id', verifyJWT, async (req, res) => {
+            try {
+                const id = req.params.id;
+                const updatedPackage = req.body;
+                const filter = { _id: new ObjectId(id) };
+                
+                // Prepare the fields to update
+                const updateDoc = {
+                    $set: {
+                        name: updatedPackage.name,
+                        description: updatedPackage.description,
+                        price: parseFloat(updatedPackage.price),
+                        availableSeats: parseInt(updatedPackage.availableSeats),
+                        videoLink: updatedPackage.videoLink,
+                        status: "approved"
+                    }
+                };
+        
+                // If a new image is provided, include it in the update
+                if (updatedPackage.image) {
+                    updateDoc.$set.image = updatedPackage.image;
+                }
+        
+                // Perform the update
+                const result = await PackagesCollection.updateOne(filter, updateDoc);
+        
+                // Send success response
+                if (result.modifiedCount > 0) {
+                    res.status(200).send({ success: true, message: 'Package updated successfully', result });
+                } else {
+                    res.status(404).send({ success: false, message: 'Package not found or no changes made' });
+                }
+            } catch (error) {
+                console.error('Error updating package:', error);
+                res.status(500).send({ success: false, message: 'Failed to update package', error });
+            }
+        });
+        
+
         // Update a Packages
         app.put('/update-Package/:id', verifyJWT, verifyInstructor, async (req, res) => {
             const id = req.params.id;
@@ -229,6 +288,7 @@ async function run() {
             res.send(result);
         })
 
+        
 
         // Get single Package by id for details page
         app.get('/Package/:id', async (req, res) => {
@@ -387,6 +447,7 @@ async function run() {
 //             
       
           })
+
       
     app.post('/success-payment/:trid',async(req,res)=>{
             const payment=req.body;
@@ -468,7 +529,51 @@ async function run() {
         // POST PAYMENT INFO 
 
 
-        
+    app.get('/singlepayment/:id', async (req, res) => {
+    const id = req.params.id;
+    const query = { _id: new ObjectId(id) };
+
+    const options = {
+        projection: {
+            transactionid: 1,
+            userEmail: 1,
+            userName: 1,
+            price: 1,
+            quantity: 1,
+            selectedPackagesId: 1,
+            PackagesId: 1,
+            PackagesNames: 1,
+            InstructorsNames: 1,
+        },
+    };
+
+    try {
+        const result = await paymentCollection.findOne(query, options);
+        if (result) {
+            res.send(result);
+        } else {
+            res.status(404).send({ message: 'Payment not found' });
+        }
+    } catch (error) {
+        res.status(500).send({ error: 'Failed to retrieve payment details' });
+    }
+});
+
+app.get('/allpayments', async (req, res) => {
+    try {
+      // const decoded=req.decoded;
+      // if(decoded.email !==req.query.email){
+      //   return res.status(403).send({error:1,message:"forbidden access"})
+      // }
+      const payments = await paymentCollection.find().toArray();
+      // console.log(payments);
+      res.send(payments);
+    } catch (error) {
+      console.error('Error fetching payments:', error);
+      res.status(500).send({ error: true, message: 'Internal server error' });
+    }
+  });
+
 
 
         app.get('/payment-history/:email', async (req, res) => {
