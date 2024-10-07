@@ -3,6 +3,7 @@ import { useLoaderData, useNavigate } from 'react-router-dom'; // Added useNavig
 import { toast } from 'react-toastify'; 
 import Modal from './Modal';
 import { useUser } from '../../../hooks/useUser';
+import moment from 'moment';
 
 const Viewstudents = () => {
     const data = useLoaderData();
@@ -78,6 +79,7 @@ const Viewstudents = () => {
                     <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
                         <th className="py-3 px-6 text-left">Name</th>
                         <th className="py-3 px-6 text-left">Email</th>
+                        <th className="py-3 px-6 text-left">Enrolled Date</th>
                         <th className="py-3 px-6 text-center">Actions</th>
                     </tr>
                 </thead>
@@ -91,6 +93,9 @@ const Viewstudents = () => {
                             </td>
                             <td className="py-3 px-6 text-left">
                                 <span>{student.userEmail}</span>
+                            </td>
+                            <td className="py-3 px-6 text-left">
+                                <span>{moment(student.enrolleddate).format('MMMM Do YYYY, h:mm a')}</span>
                             </td>
                             <td className="py-3 px-6 text-center">
                                 <button 

@@ -8,9 +8,9 @@ const Giventask = () => {
     const [tasks, setTasks] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const location = useLocation(); // Get location to access passed state
+    const location = useLocation(); 
     const navigate = useNavigate();
-    const userEmail = location.state?.email; // Get email from location state
+    const userEmail = location.state?.email; 
     const { currentUser, isLoading } = useUser();
 
     useEffect(() => {

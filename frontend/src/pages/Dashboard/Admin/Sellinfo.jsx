@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { useUser } from '../../../../../hooks/useUser';
-import useAxiosSecure from '../../../../../hooks/useAxiosSecure';
-import useAxiosFetch from '../../../../../hooks/useAxiosFetch';
+
 import moment from 'moment';
 import Pagination from '@mui/material/Pagination';
 import { ThemeProvider, createTheme } from '@mui/material';
 import { ScaleLoader } from 'react-spinners';
 import { Link, useNavigate } from 'react-router-dom';
+import useAxiosFetch from '../../../hooks/useAxiosFetch';
+import useAxiosSecure from '../../../hooks/useAxiosSecure';
+import { useUser } from '../../../hooks/useUser';
 
-const MyPaymentHistory = () => {
+const Sellinfo= () => {
     const axiosFetch = useAxiosFetch();
     const axiosSecure = useAxiosSecure();
     const { currentUser } = useUser();
@@ -33,7 +34,7 @@ const MyPaymentHistory = () => {
     }, [page, payments]);
 
     useEffect(() => {
-        axiosFetch.get(`/payment-history/${currentUser.email}`)
+        axiosFetch.get(`/allpayments`)
             .then(res => {
                 setPayments(res.data);
                 setLoading(false);
@@ -65,8 +66,8 @@ const MyPaymentHistory = () => {
         <div>
             <div className="text-center mt-6 mb-16">
                 <p className='text-gray-400'>Hey, <span className='text-secondary font-bold'>{currentUser.name}</span> Welcome...!</p>
-                <h1 className='text-4xl font-bold'>My Paym<span className='text-secondary'>ent Hist</span>ory</h1>
-                <p className='text-gray-500 text-sm my-3'>You can see your payment history here</p>
+                <h1 className='text-4xl font-bold'>Your <span className='text-secondary'>Sell </span>Information</h1>
+                <p className='text-gray-500 text-sm my-3'>You can see your selling data here</p>
             </div>
 
             <div>
@@ -82,6 +83,8 @@ const MyPaymentHistory = () => {
                                     <thead className="border-b font-medium dark:border-neutral-500">
                                         <tr>
                                             <th scope="col" className="px-6 py-4">#</th>
+                                            <th scope="col" className="px-6 py-4">User Name</th>
+                                            <th scope="col" className="px-6 py-4">Email</th>
                                             <th scope="col" className="px-6 py-4">Amount</th>
                                             <th scope="col" className="px-6 py-4">Total Items</th>
                                             <th scope="col" className="px-6 py-4">Time</th>
@@ -97,6 +100,8 @@ const MyPaymentHistory = () => {
                                                     className="border-b transition duration-300 ease-in-out hover:bg-neutral-100 dark:border-neutral-500 dark:hover:bg-neutral-600"
                                                 >
                                                     <td className="whitespace-nowrap px-6 py-4 font-medium">{(page - 1) * itemsPerPage + idx + 1}</td>
+                                                    <td className="whitespace-nowrap px-6 py-4">{payment.userName}</td>
+                                                    <td className="whitespace-nowrap px-6 py-4">{payment.userEmail}</td>
                                                     <td className="whitespace-nowrap px-6 py-4">{payment.price}</td>
                                                     <td className="whitespace-nowrap px-6 py-4">{payment.selectedPackagesId.length}</td>
                                                     <td className="whitespace-nowrap px-6 py-4">
@@ -128,4 +133,4 @@ const MyPaymentHistory = () => {
     );
 };
 
-export default MyPaymentHistory;
+export default Sellinfo;

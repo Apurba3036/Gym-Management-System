@@ -35,7 +35,8 @@ const Payment = () => {
                         PackagesNames: selectedPackages.map(item => item.name),
                         images: selectedPackages.map(item => item.image),
                         InstructorsNames: selectedPackages.map(item => item.instructorName),
-                        orderstatus:"Payment not done"
+                        orderstatus:"Payment not done",
+                        enrolleddate: new Date(),
                     }),
                 });
 

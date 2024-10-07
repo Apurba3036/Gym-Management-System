@@ -33,6 +33,9 @@ import AddPackage from "../pages/Dashboard/Admin/AddPackage";
 import Viewstudents from "../pages/Dashboard/Instructors/Viewstudents";
 import Mytask from "../pages/Dashboard/Student/Mytask";
 import Giventask from "../pages/Dashboard/Instructors/Giventask";
+import Paymentdetails from "../pages/Paymentdetails/Paymentdetails";
+import Sellinfo from "../pages/Dashboard/Admin/Sellinfo";
+import Updatemypackage from "../pages/Dashboard/Admin/Updatemypackage";
 
 
 
@@ -62,6 +65,7 @@ export const router = createBrowserRouter([
                 path: "packages",
                 element: <Packages />
             },
+            
             {
                 path: "/Packages/:id",
                 element: <SinglePackage/>,
@@ -95,6 +99,14 @@ export const router = createBrowserRouter([
             {
                 path: 'manage-Package',
                 element: <AdminRoute><ManagePackages /></AdminRoute>
+            },
+            {
+                path: 'sellinfo',
+                element: <AdminRoute><Sellinfo></Sellinfo></AdminRoute>
+            },
+            {
+                path: 'updatepackageadmin/:id',
+                element: <AdminRoute><Updatemypackage></Updatemypackage></AdminRoute>
             },
             // * INSTRUCTOR ROUTES
             {
@@ -143,6 +155,11 @@ export const router = createBrowserRouter([
                 path: 'my-payments',
                 element: <StudentRoute><MyPaymentHistory /></StudentRoute>
             },
+            {
+                path: 'Paymentdetails/:id',
+                element: <Paymentdetails />
+            }
+            ,            
             {
                 path: 'my-task',
                 element: <StudentRoute><Mytask></Mytask></StudentRoute>

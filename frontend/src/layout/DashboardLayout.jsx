@@ -21,6 +21,7 @@ const adminNavItems = [
     { to: "/dashboard/manage-users", icon: <FaUsers className="text-2xl" />, label: "Manage Users" },
     { to: "/dashboard/manage-Package", icon: <BsFillPostcardFill className="text-2xl" />, label: "Manage Package" },
     { to: "/dashboard/add-Package", icon: <MdExplore className="text-2xl" />, label: "Add A Package" },
+    { to: "/dashboard/sellinfo", icon: <MdPayments className="text-2xl" />, label: "Sell Information" },
 ];
 const instructorNavItem = [
     { to: "/dashboard/instructor-cp", icon: <FaHome className="text-2xl" />, label: "Home" },

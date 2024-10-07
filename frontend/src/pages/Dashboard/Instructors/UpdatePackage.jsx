@@ -22,8 +22,8 @@ const UpdatePackage = () => {
         newData.instructorName = currentUser.name;
         newData.instructorEmail = currentUser.email;
         newData.status = 'pending';
-        newData.submitted = new Date();
-        newData.totalEnrolled = 0;
+        
+       
 
         toast.promise(
             axiosSecure.put(`/update-Package/${data._id}`, newData)

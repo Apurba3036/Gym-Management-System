@@ -3,6 +3,7 @@ import useAxiosSecure from '../../../../hooks/useAxiosSecure';
 import { useUser } from '../../../../hooks/useUser';
 import { Pagination, ThemeProvider, createTheme } from '@mui/material';
 import { ScaleLoader } from 'react-spinners';
+import moment from 'moment';
 
 const EnrolledPackages = () => {
     const [data, setData] = useState([]);
@@ -64,6 +65,7 @@ const EnrolledPackages = () => {
                         <tr className="bg-gray-100">
                             <th className="border border-gray-300 px-4 py-2">Package Name</th>
                             <th className="border border-gray-300 px-4 py-2">Instructor Name</th>
+                            <th className="border border-gray-300 px-4 py-2">Date</th>
 
                             <th className="border border-gray-300 px-4 py-2">Quantity and Price</th>
                             <th className="border border-gray-300 px-4 py-2">Actions</th>
@@ -80,9 +82,10 @@ const EnrolledPackages = () => {
                                         <td className="border border-gray-300 px-4 py-2">
                                             {item.InstructorsNames[index]}
                                         </td>
-                                        {/* <td className="border border-gray-300 px-4 py-2">
-                                            ${item.price}
-                                        </td> */}
+                                        <td className="border border-gray-300 px-4 py-2">
+                                        
+                                            {moment(item.enrolleddate).format('MMMM Do YYYY, h:mm a')}
+                                        </td>
                                         {index === 0 && (
                                             <td className="border border-gray-300 px-4 py-2" rowSpan={item.PackagesNames.length}>
                                                 {item.quantity} ${item.price}
