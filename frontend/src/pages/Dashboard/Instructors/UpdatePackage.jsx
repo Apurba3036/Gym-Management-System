@@ -139,6 +139,18 @@ const UpdatePackage = () => {
                             name='price'
                         />
                     </div>
+                    <div className="mb-6">
+                        <label className="block text-gray-700 font-bold mb-2" htmlFor="finishedDate">
+                            Finished Date
+                        </label>
+                        <input
+                            className="w-full border-secondary px-4 py-2 border rounded-md focus:outline-none focus:ring-blue-500"
+                            type="date"
+                            required
+                            name="finishedDate"
+                            defaultValue={data?.finishedDate || 0}
+                        />
+                    </div>
                 </div>
                 <div className="mb-6">
                     <label className="block text-gray-700 font-bold mb-2" htmlFor="price">

@@ -29,15 +29,15 @@ const AddPackage = () => {
                     if (data.success === true) {
                         console.log(data.data.display_url);
                         newData.image = data.data.display_url;
-                    
+
                         newData.status = 'pending';
-                        newData.submitted = new Date(); 
+                        newData.submitted = new Date();
                         newData.totalEnrolled = 0;
                         // console.log(newData);
-                        axiosSecure.post('/addpackage' , newData)
-                        .then(res => {
-                            console.log(res.data);
-                        })
+                        axiosSecure.post('/addpackage', newData)
+                            .then(res => {
+                                console.log(res.data);
+                            })
 
                     }
                 }),
@@ -96,7 +96,7 @@ const AddPackage = () => {
                             <input
                                 className="w-full px-4 py-2 border border-secondary rounded-md focus:outline-none focus:ring-blue-500"
                                 type="text"
-                              
+
                                 placeholder='Instructor Name'
                                 name='instructorName'
                             />
@@ -109,7 +109,7 @@ const AddPackage = () => {
                                 title='You can not update your email'
                                 className="w-full px-4 py-2 border border-secondary rounded-md focus:outline-none focus:ring-blue-500"
                                 type="email"
-                              
+
                                 name='instructorEmail'
                             />
                         </div>
@@ -140,6 +140,18 @@ const AddPackage = () => {
                             name='price'
                         />
                     </div>
+                    <div className="mb-6">
+                        <label className="block text-gray-700 font-bold mb-2" htmlFor="finishedDate">
+                            Finished Date
+                        </label>
+                        <input
+                            className="w-full border-secondary px-4 py-2 border rounded-md focus:outline-none focus:ring-blue-500"
+                            type="date"
+                            required
+                            name="finishedDate"
+                        />
+                    </div>
+
                 </div>
                 <div className="mb-6">
                     <label className="block text-gray-700 font-bold mb-2" htmlFor="price">
@@ -156,7 +168,7 @@ const AddPackage = () => {
                 </div>
                 <div className="mb-6">
                     <label className="block text-gray-700 font-bold mb-2" htmlFor="price">
-                        Description About your Package 
+                        Description About your Package
                     </label>
                     <textarea placeholder='Description about your course' name="description" className='resize-none border w-full p-2 rounded-lg  border-secondary outline-none' rows="4"></textarea>
                 </div>
@@ -173,5 +185,5 @@ const AddPackage = () => {
     );
 };
 
-export default AddPackage; 
+export default AddPackage;
 

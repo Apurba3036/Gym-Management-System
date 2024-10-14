@@ -6,7 +6,7 @@ import useAxiosSecure from '../../../hooks/useAxiosSecure';
 const KEY = import.meta.env.VITE_IMG_TOKEN;
 
 const Updatemypackage = () => {
-    const {id } = useParams(); 
+    const { id } = useParams();
     const API_URL = `https://api.imgbb.com/1/upload?key=${KEY}`;
     const axiosSecure = useAxiosSecure();
     const { currentUser, isLoading } = useUser();
@@ -23,7 +23,7 @@ const Updatemypackage = () => {
                 console.error('Error fetching package data:', err);
             });
     }, [id, axiosSecure]);
-   console.log(packageData);
+    console.log(packageData);
     const handleFormSubmit = (e) => {
         e.preventDefault();
         const formData = new FormData(e.target);
@@ -112,7 +112,7 @@ const Updatemypackage = () => {
                 </div>
 
                 <div className="">
-                    
+
                     <div className="grid gap-3 grid-cols-2">
                         <div className="mb-6">
                             <label className="block text-gray-700 font-bold mb-2" htmlFor="instructorName">
@@ -168,6 +168,19 @@ const Updatemypackage = () => {
                             defaultValue={packageData?.price || 0}
                         />
                     </div>
+                    <div className="mb-6">
+                        <label className="block text-gray-700 font-bold mb-2" htmlFor="finishedDate">
+                            Finished Date
+                        </label>
+                        <input
+                            className="w-full border-secondary px-4 py-2 border rounded-md focus:outline-none focus:ring-blue-500"
+                            type="date"
+                            required
+                            name="finishedDate"
+                            defaultValue={packageData?.finishedDate || 0}
+                        />
+                    </div>
+
                 </div>
 
                 <div className="mb-6">

@@ -242,6 +242,7 @@ app.get('/singlepackage/:id', async (req, res) => {
                         price: parseFloat(updatedPackage.price),
                         availableSeats: parseInt(updatedPackage.availableSeats),
                         videoLink: updatedPackage.videoLink,
+                        finishedDate:updatedPackage.finishedDate,
                         status: "approved"
                     }
                 };
@@ -281,6 +282,7 @@ app.get('/singlepackage/:id', async (req, res) => {
                     price: updatedPackage.price,
                     availableSeats: parseInt(updatedPackage.availableSeats),
                     videoLink: updatedPackage.videoLink,
+                    finishedDate: updatedPackage.finishedDate,
                     status: 'pending'
                 }
             }
