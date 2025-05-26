@@ -5,6 +5,8 @@ import { Pagination, ThemeProvider, createTheme } from '@mui/material';
 import { ScaleLoader } from 'react-spinners';
 import moment from 'moment';
 
+import { Link, useNavigate } from 'react-router-dom';
+
 const EnrolledPackages = () => {
     const [data, setData] = useState([]);
     const [page, setPage] = useState(1);
@@ -42,10 +44,11 @@ const EnrolledPackages = () => {
     }, [page, data]);
 
     const handleChange = (event, value) => setPage(value);
-    
-    const handleDetailsClick = (packageId) => {
+    const navigate = useNavigate();
+    const handleDetailsClick = (PackagesId) => {
+        console.log(PackagesId);
         // Implement navigation to details page for the specific packageId
-        console.log(`Details clicked for packageId: ${packageId}`);
+        navigate(`/Packages/${PackagesId}`);
         // You can use a router to navigate to a detailed view
     };
 
@@ -72,39 +75,32 @@ const EnrolledPackages = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {
-                            paginatedData.flatMap((item) => {
-                                return item.PackagesNames.map((packageName, index) => (
-                                    <tr key={index}>
-                                        <td className="border border-gray-300 px-4 py-2">
-                                            {packageName}
-                                        </td>
-                                        <td className="border border-gray-300 px-4 py-2">
-                                            {item.InstructorsNames[index]}
-                                        </td>
-                                        <td className="border border-gray-300 px-4 py-2">
-                                        
-                                            {moment(item.enrolleddate).format('MMMM Do YYYY, h:mm a')}
-                                        </td>
-                                        {index === 0 && (
-                                            <td className="border border-gray-300 px-4 py-2" rowSpan={item.PackagesNames.length}>
-                                                {item.quantity} ${item.price}
-                                            </td>
-                                            
-                                        )}
-                                        <td className="border border-gray-300 px-4 py-2">
-                                            <button
-                                                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded"
-                                                onClick={() => handleDetailsClick(item.PackagesId[index])}
-                                            >
-                                                Details
-                                            </button>
-                                        </td>
-                                    </tr>
-                                ));
-                            })
-                        }
-                    </tbody>
+    {paginatedData.flatMap((item) =>
+        item.PackagesNames.map((packageName, index) => (
+            <tr key={`${item._id}-${index}`}>
+                <td className="border border-gray-300 px-4 py-2">{packageName}</td>
+                <td className="border border-gray-300 px-4 py-2">{item.InstructorsNames[index]}</td>
+                <td className="border border-gray-300 px-4 py-2">
+                    {moment(item.enrolleddate).format('MMMM Do YYYY, h:mm a')}
+                </td>
+                {index === 0 && (
+                    <td className="border border-gray-300 px-4 py-2" rowSpan={item.PackagesNames.length}>
+                         ৳{item.price}
+                    </td>
+                )}
+                <td className="border border-gray-300 px-4 py-2">
+                    <button
+                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded"
+                        onClick={() => handleDetailsClick(item.PackagesId[index])}
+                    >
+                        Details
+                    </button>
+                </td>
+            </tr>
+        ))
+    )}
+</tbody>
+
                 </table>
             </div>
 

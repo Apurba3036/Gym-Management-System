@@ -12,7 +12,6 @@ const Packages = () => {
     const role = currentUser?.role;
     const [enrolledPackages, setEnrolledPackages] = useState([]);
     const [Packages, setPackages] = useState([]);
-
     const axiosFetch = useAxiosFetch();
     const axiosSecure = useAxiosSecure();
 
@@ -34,14 +33,71 @@ const Packages = () => {
         setHoveredCard(index);
     };
 
+    const handleSelect = (id, name, image, description, instructorName, price) => {
+        if (!currentUser) {
+            return toast.error("Please log in to select a package");
+        }
+
+        // Check if the user is already enrolled in the package
+        const allEnrolledPackageIds = enrolledPackages.flatMap(item => item.PackagesId);
+        if (allEnrolledPackageIds.includes(id)) {
+            return toast.error("You are already enrolled in this package");
+        }
+
+        // Handle the logic to add the package to the cart
+        addToCart(id, name, image, description, instructorName, price);
+    };
+
+    const addToCart = (id, name, image, description, instructorName, price) => {
+        // Check if the package is already selected in the cart
+        axiosSecure.get(`/cart-item/${id}?email=${currentUser?.email}`)
+            .then((res) => {
+                if (res.data && res.data.packageId === id) {
+                    return toast.error("You have already selected this package");
+                }
+
+                // Add to cart if not already selected
+                const selectedPackage = {
+                    userId: currentUser._id,
+                    userMail: currentUser.email,
+                    packageId: id,
+                    name,
+                    image,
+                    description,
+                    instructorName,
+                    price,
+                    date: new Date(),
+                };
+
+                toast.promise(
+                    axiosSecure.post('/add-to-cart', selectedPackage)
+                        .then(() => {
+                            toast.success("Package added to cart successfully!");
+                        })
+                        .catch((err) => {
+                            console.error(err);
+                            toast.error("Failed to add package to cart");
+                        }),
+                    {
+                        pending: 'Processing your request...',
+                        error: 'Something went wrong!',
+                    }
+                );
+            })
+            .catch((err) => {
+                console.error(err);
+                toast.error("Failed to check package selection status");
+            });
+    };
+
     const calculateDateDifference = (startDate, endDate) => {
         const start = new Date(startDate);
         const end = new Date(endDate);
-        
+
         const yearsDiff = end.getFullYear() - start.getFullYear();
         const monthsDiff = end.getMonth() - start.getMonth() + (yearsDiff * 12);
         const daysDiff = end.getDate() - start.getDate();
-        
+
         let months = monthsDiff;
         let days = daysDiff;
 
@@ -87,7 +143,7 @@ const Packages = () => {
                                 >
                                     <div className="absolute inset-0 flex items-center justify-center">
                                         <button
-                                            onClick={() => handelSelect(Pac._id, Pac.name, Pac.image, Pac.description, Pac.instructorName, Pac.price)}
+                                            onClick={() => handleSelect(Pac._id, Pac.name, Pac.image, Pac.description, Pac.instructorName, Pac.price)}
                                             title={role === 'admin' || role === 'instructor' ? 'Instructor/Admin Cannot Select' : (Pac.availableSeats < 1 ? 'No seats available' : 'You can select this class')}
                                             disabled={role === 'admin' || role === 'instructor' || Pac.availableSeats < 1}
                                             className="px-4 py-2 text-white disabled:bg-red-300 bg-secondary duration-300 rounded hover:bg-red-700"
@@ -102,7 +158,7 @@ const Packages = () => {
                                 <p className="text-gray-500 text-xs">Instructor: {Pac.instructorName}</p>
                                 <div className="flex items-center justify-between mt-4">
                                     <span className="text-gray-600 text-xs">Available Seats: <span className='text-secondary'>{Pac.availableSeats}</span></span>
-                                    <span className="text-green-500 font-semibold">${Pac.price}</span>
+                                    <span className="text-green-500 font-semibold">৳{Pac.price}</span>
                                 </div>
 
                                 <p className="text-xs">

@@ -27,6 +27,7 @@ const CheckoutPayment = ({ price , cartItm }) => {
             .then((res) => {
                 // SET CLASSES ID IN STATE
                 const PackagesId = res.data.map(item => item._id);
+                
                 setCart(PackagesId)
             })
             .catch((err) => {

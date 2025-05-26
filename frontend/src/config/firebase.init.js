@@ -29,7 +29,7 @@ const firebaseConfig = {
   apiKey: "AIzaSyBbsU6n5Mz36N1VUUbkDAwTHaSWy6vnzeY",
   authDomain: "workout-master-cee3b.firebaseapp.com",
   projectId: "workout-master-cee3b",
-  storageBucket: "workout-master-cee3b.appspot.com",
+  storageBucket: "workout-master-cee3b.firebasestorage.app",
   messagingSenderId: "33335769129",
   appId: "1:33335769129:web:8a7e26c8341e99965bc438",
   measurementId: "G-XTZRQXB7TG"

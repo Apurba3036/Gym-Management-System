@@ -31,7 +31,7 @@ const Payment = () => {
                         price,
                         quantity: selectedPackages.length,
                         selectedPackagesId: selectedPackages.map(item => item._id),
-                        PackagesId: selectedPackages.map(item => item.PackageId),
+                        PackagesId: selectedPackages.map(item => item.packageId),
                         PackagesNames: selectedPackages.map(item => item.name),
                         images: selectedPackages.map(item => item.image),
                         InstructorsNames: selectedPackages.map(item => item.instructorName),

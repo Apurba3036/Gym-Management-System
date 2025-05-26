@@ -36,6 +36,7 @@ import Giventask from "../pages/Dashboard/Instructors/Giventask";
 import Paymentdetails from "../pages/Paymentdetails/Paymentdetails";
 import Sellinfo from "../pages/Dashboard/Admin/Sellinfo";
 import Updatemypackage from "../pages/Dashboard/Admin/Updatemypackage";
+import Successpayment from "../pages/Dashboard/Student/Payment/Successpayment";
 
 
 
@@ -64,6 +65,10 @@ export const router = createBrowserRouter([
             {
                 path: "packages",
                 element: <Packages />
+            },
+            {
+                path: "/success",
+                element: <Successpayment></Successpayment>
             },
             
             {

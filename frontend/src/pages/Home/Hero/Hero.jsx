@@ -1,5 +1,6 @@
 import React from 'react';
 import bgImg from '../../../assets/home/banner-1.jpg';
+import { Link } from 'react-router-dom';
 const Hero = () => {
     return (
         <div className='min-h-screen bg-cover' style={{ backgroundImage: `url(${bgImg})` }}>
@@ -12,7 +13,7 @@ const Hero = () => {
     
                         <div className="flex flex-wrap items-center gap-5">
                             <button className='px-7 py-3 rounded-lg bg-secondary font-bold uppercase'>Join Today</button>
-                            <button className='px-7 py-[10px] bg-opacity-80 hover:bg-white hover:text-black hover:outline-white duration-200  rounded-lg bg-transparent outline  font-bold uppercase'>View Packages</button>
+                           <Link to="/packages"> <button className='px-7 py-[10px] bg-opacity-80 hover:bg-white hover:text-black hover:outline-white duration-200  rounded-lg bg-transparent outline  font-bold uppercase'>View Packages</button></Link>
                         </div>
                     </div>
                 </div>

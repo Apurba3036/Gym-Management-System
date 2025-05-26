@@ -71,7 +71,7 @@ const MyPackages = () => {
                                                     </div>
                                                     <div className="">
                                                         <h1 className='font-bold mb-3'>.....</h1>
-                                                        <h1 className='text-secondary my-2'><span className='text-black '>Price</span> : {Pac.price} <span className='text-black'>$</span></h1>
+                                                        <h1 className='text-secondary my-2'><span className='text-black '>Price</span> : {Pac.price} <span className='text-black'>৳</span></h1>
                                                         <h1 className='text-secondary my-2'><span className='text-black '>Submitted</span> : <span className=''>{Pac.submitted ? moment(Pac.submitted).format('MMMM Do YYYY') : 'Not Get Data'}</span></h1>
                                                     </div>
                                                     <div className="w-1/3">

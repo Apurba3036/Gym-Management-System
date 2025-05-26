@@ -133,7 +133,7 @@ const Updatemypackage = () => {
                             <input
                                 className="w-full px-4 py-2 border border-secondary rounded-md focus:outline-none focus:ring-blue-500"
                                 type="email"
-                                disabled
+                             
                                 name="instructorEmail"
                                 value={packageData?.instructorEmail || currentUser?.email}
                             />

@@ -218,12 +218,12 @@ const SelectedPackage = () => {
                                 <div className="flex justify-between mb-2">
                                     <span>Taxes</span>
                                     <span>
-                                        ${totalTax.toFixed(2)}
+                                    ৳{totalTax.toFixed(2)}
                                     </span>
                                 </div>
                                 <div className="flex justify-between mb-2">
                                     <span>Extra Fees</span>
-                                    <span>$0</span>
+                                    <span>৳ 0</span>
                                 </div>
                                 <hr className="my-2" />
                                 <div className="flex justify-between mb-2">

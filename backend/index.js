@@ -308,14 +308,27 @@ app.get('/singlepackage/:id', async (req, res) => {
             res.send(result);
         })
         // Get cart item id for checking if a class is already in cart
-        app.get('/cart-item/:id', verifyJWT, async (req, res) => {
+        app.get('/cart-item/:id', async (req, res) => {
             const id = req.params.id;
             const email = req.query.email;
-            const query = { PackageId: id, userMail: email };
-            const projection = { PackageId: 1 };
+            console.log(id, email);
+        
+            // Query using packageId and userMail
+            const query = { packageId: id, userMail: email };
+            console.log(query);
+        
+            // Projection to only return packageId
+            const projection = { packageId: 1 };
+        
+            // Find the document
             const result = await cartCollection.findOne(query, { projection: projection });
-            res.send(result);
-        })
+            console.log(result);
+        
+            
+                res.send(result);
+            
+        });
+        
 
         app.get('/usercart',async(req,res)=>{
             // console.log(req.headers.authorization);
@@ -453,6 +466,7 @@ app.get('/singlepackage/:id', async (req, res) => {
       
     app.post('/success-payment/:trid',async(req,res)=>{
             const payment=req.body;
+            console.log(payment);
             const trid=req.params.trid;
             // console.log(payment);
             if(payment.status==="VALID"){
@@ -524,7 +538,10 @@ app.get('/singlepackage/:id', async (req, res) => {
                               
                 
             //  console.log(paymentData);
-              res.send("payment successful")
+            //   res.send("payment successful")
+              if(payment.status==="VALID"){
+                res.redirect("http://localhost:5173/success")
+              }
             }
           })
       

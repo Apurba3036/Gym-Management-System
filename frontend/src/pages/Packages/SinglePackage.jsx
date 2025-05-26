@@ -80,11 +80,14 @@ const SinglePackage = () => {
         data-gr-ext-installed=""
       >
         {/* breadcrumb or header */}
-        <div className="breadcrumbs bg-primary py-20 mt-20 section-padding bg-cover bg-center bg-no-repeat">
-          <div className="container text-center">
-            <h1 className="text-1xl font-bold">Package Details</h1>
-          </div>
-        </div>
+        <div 
+  className="breadcrumbs bg-primary py-20 mt-20 section-padding bg-cover bg-center bg-no-repeat" 
+  style={{ backgroundImage: "url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Z3ltfGVufDB8fDB8fHww')" }}
+>
+  <div className="container text-center">
+    <h1 className="text-2xl text-white font-bold">Package Details</h1>
+  </div>
+</div>
         
         <div className="nav-tab-wrapper tabs  section-padding mt-8">
           <div className="container">
@@ -98,7 +101,7 @@ const SinglePackage = () => {
                       className=" rounded-md object-fut w-full h-full block"
                     />
                   </div>
-                  <h2 className="text-2xl mb-2">UI/UX Design and Graphics Learning Bootcamp 2022</h2>
+                  <h2 className="text-2xl mb-2">{course.name}</h2>
 
                   <div className="author-meta mt-6 sm:flex  lg:space-x-16 sm:space-x-5 space-y-5 sm:space-y-0 items-center">
                     <div className="flex space-x-4 items-center group">
@@ -216,7 +219,7 @@ const SinglePackage = () => {
                                   <img src="/logo.png" alt="" />
                                 </span>
                                 <span className="flex-1 text-black">
-                                  Computer/Mobile
+                                  Hardwork
                                 </span>
                               </div>
                               <div className=" bg-white  rounded px-5 py-[18px] flex  shadow-box2 space-x-[10px] items-center">
@@ -224,7 +227,7 @@ const SinglePackage = () => {
                                   <img src="/logo.png" alt="" />
                                 </div>
                                 <span className="flex-1 text-black">
-                                  Paper &amp; Pencil
+                                  Dedication &amp; Healthy
                                 </span>
                               </div>
                               <div className=" bg-white  rounded px-5 py-[18px] flex  shadow-box2 space-x-[10px] items-center">
@@ -232,7 +235,7 @@ const SinglePackage = () => {
                                   <img src="/logo.png" alt="" />
                                 </div>
                                 <span className="flex-1 text-black">
-                                  Internet Connect
+                                  Fitness
                                 </span>
                               </div>
                             </div>
@@ -288,10 +291,10 @@ const SinglePackage = () => {
                         <img src="/play.png" alt="" />
                       </div>
                     </a>
-                    <h3>${course.price}</h3>
-                    <button onClick={() => handelSelect(course._id)} title={role === 'admin' || role === 'instructor' ? 'Instructor/Admin Can not be able to select ' ? course.availableSeats <1 : 'No seat avalible' : 'You can select this classes' } disabled={role === 'admin' || role === 'instructor' || course.availableSeats < 1}  className="btn btn-primary w-full text-center bg-secondary py-2 px-6 text-white ">
+                    <h3>৳{course.price}</h3>
+                    {/* <button onClick={() => handelSelect(course._id)} title={role === 'admin' || role === 'instructor' ? 'Instructor/Admin Can not be able to select ' ? course.availableSeats <1 : 'No seat avalible' : 'You can select this classes' } disabled={role === 'admin' || role === 'instructor' || course.availableSeats < 1}  className="btn btn-primary w-full text-center bg-secondary py-2 px-6 text-white ">
                       Enroll Now
-                    </button>
+                    </button> */}
                     <ul className="list  ">
                       <li className=" flex space-x-3 border-b border-[#ECECEC] mb-4 pb-4 last:pb-0 past:mb-0 last:border-0">
                         <div className="flex-1 space-x-3 flex items-center">
@@ -307,10 +310,16 @@ const SinglePackage = () => {
                         <div className="flex-1 space-x-3 flex items-center">
                           <MdBookOnline/>
                           <div className=" text-black font-semibold">
-                            Lectures
+                            Start:
                           </div>
                         </div>
-                        <div className="flex-none">23</div>
+                        <div className="flex-none">
+  {new Date(course.submitted).toLocaleDateString('en-GB', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).replace(/\//g, '/')} {/* This will output the format: YYYY/MM/DD */}
+</div>
                       </li>
 
                       <li className=" flex space-x-3 border-b border-[#ECECEC] mb-4 pb-4 last:pb-0 past:mb-0 last:border-0">
@@ -330,7 +339,7 @@ const SinglePackage = () => {
                             Enrolled
                           </div>
                         </div>
-                        <div className="flex-none">2k Students</div>
+                        <div className="flex-none">{course.totalEnrolled}</div>
                       </li>
 
                       <li className=" flex space-x-3 border-b border-[#ECECEC] mb-4 pb-4 last:pb-0 past:mb-0 last:border-0">
@@ -350,7 +359,7 @@ const SinglePackage = () => {
                             Language
                           </div>
                         </div>
-                        <div className="flex-none">English</div>
+                        <div className="flex-none">English, Bangla</div>
                       </li>
                     </ul>
                     <ul className="flex space-x-4 items-center pt-3 ">
