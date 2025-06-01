@@ -2,151 +2,156 @@ import { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 import html2canvas from "html2canvas-pro";
 import jsPDF from "jspdf";
-import { FaRegListAlt, FaEnvelope, FaDollarSign, FaCalendarAlt, FaReceipt, FaClipboardCheck } from 'react-icons/fa';
 import moment from "moment";
+import { motion } from 'framer-motion';
+import { FaRegListAlt, FaEnvelope, FaDollarSign, FaCalendarAlt, FaReceipt, FaClipboardCheck, FaChartPie } from 'react-icons/fa';
+import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
 
-const Paymentdetails = () => {
-    const [payment, setPaymentdetails] = useState({});
-    const { id } = useParams();
-    const contentRef = useRef(null);
+const COLORS = ['#FF8042', '#0088FE', '#00C49F', '#FFBB28', '#A28CFD'];
 
-    useEffect(() => {
-        fetch(`http://localhost:5000/singlepayment/${id}`)
-            .then(res => res.json())
-            .then(data => setPaymentdetails(data))
-            .catch(error => console.error('Error fetching JSON:', error));
-    }, [id]);
+export default function PaymentDetails() {
+  const [payment, setPayment] = useState({});
+  const { id } = useParams();
+  const contentRef = useRef(null);
 
-    const convertToPdf = () => {
-        const content = contentRef.current;
+  useEffect(() => {
+    fetch(`http://localhost:5000/singlepayment/${id}`)
+      .then(res => res.json())
+      .then(data => setPayment(data))
+      .catch(console.error);
+  }, [id]);
 
-        html2canvas(content, { scale: 3 }).then((canvas) => {
-            const imgData = canvas.toDataURL('image/png');
-            const pdf = new jsPDF('p', 'pt', 'a4');
-            const imgWidth = pdf.internal.pageSize.getWidth();
-            const imgHeight = canvas.height * imgWidth / canvas.width;
-            let heightLeft = imgHeight;
+  const convertToPdf = async () => {
+    try {
+      const canvas = await html2canvas(contentRef.current, { scale: 3 });
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF('p', 'pt', 'a4');
+      const imgWidth = pdf.internal.pageSize.getWidth();
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      let heightLeft = imgHeight;
+      let position = 0;
 
-            let position = 0;
+      pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+      heightLeft -= pdf.internal.pageSize.height;
 
-            pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-            heightLeft -= pdf.internal.pageSize.height;
+      while (heightLeft > 0) {
+        position = heightLeft - imgHeight;
+        pdf.addPage();
+        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+        heightLeft -= pdf.internal.pageSize.height;
+      }
 
-            while (heightLeft > 0) {
-                position = heightLeft - imgHeight;
-                pdf.addPage();
-                pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-                heightLeft -= pdf.internal.pageSize.height;
-            }
+      pdf.save('payment-details.pdf');
+    } catch (error) {
+      console.error('PDF generation error:', error);
+    }
+  };
 
-            pdf.save('payment-details.pdf');
-        }).catch((error) => {
-            console.error('Error generating PDF:', error);
-        });
-    };
+  const {
+    transactionid,
+    userEmail,
+    userName,
+    price = 0,
+    quantity = 0,
+    PackagesNames = [],
+    InstructorsNames = [],
+    enrolleddate
+  } = payment;
 
-    const {
-        transactionid,
-        userEmail,
-        userName,
-        price,
-        quantity,
-        PackagesNames,
-        InstructorsNames,
-        enrolleddate
-    } = payment;
+  const chartData = PackagesNames.map((name) => ({ name, value: price / PackagesNames.length }));
 
-    return (
-        <div>
-            <div className="hero h-60 rounded-lg overflow-hidden relative" style={{ backgroundImage: `url("https://logopond.com/logos/1af777beab7e52f2b4f518d09637e48c.png")` }}>
-                <div className="hero-overlay bg-opacity-70 absolute inset-0 bg-black"></div>
-                <div className="hero-content relative z-5 text-center text-white"></div>
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6 }}
+      className="min-h-screen bg-gray-100 py-8"
+    >
+      <div className="container mx-auto px-4">
+        {/* Only this wrapper is captured */}
+        <div ref={contentRef}>
+          {/* Header */}
+          <motion.div
+            className="bg-cover bg-center h-48 rounded-lg overflow-hidden relative mb-8"
+            style={{ backgroundImage: `url('https://images.unsplash.com/photo-1540496905036-5937c10647cc?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8Zml0bmVzcyUyMGNlbnRlcnxlbnwwfHwwfHx8MA%3D%3D')` }}
+            initial={{ scale: 1.1 }}
+            animate={{ scale: 1 }}
+            transition={{ duration: 1 }}
+          >
+            <div className="absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center">
+              <h1 className="text-4xl font-bold text-white">Payment Summary</h1>
+            </div>
+          </motion.div>
+
+          {/* Details Card */}
+          <motion.div
+            className="bg-white rounded-lg shadow-lg overflow-hidden"
+            whileHover={{ scale: 1.02 }}
+            transition={{ duration: 0.3 }}
+          >
+            <div className="p-6">
+              <h2 className="text-2xl font-semibold text-orange-500 mb-6 flex items-center gap-2">
+                <FaCalendarAlt /> Details
+              </h2>
+              {[
+                { label: 'Transaction ID', icon: <FaRegListAlt className="text-blue-500" />, value: transactionid },
+                { label: 'User Email', icon: <FaEnvelope className="text-red-500" />, value: userEmail },
+                { label: 'User Name', icon: <FaClipboardCheck className="text-purple-500" />, value: userName },
+                { label: 'Total Price', icon: <FaDollarSign className="text-green-500" />, value: `${price} ৳` },
+                { label: 'Quantity', icon: <FaClipboardCheck className="text-purple-500" />, value: quantity },
+                { label: 'Packages', icon: <FaReceipt className="text-yellow-500" />, value: PackagesNames.join(', ') },
+                { label: 'Instructors', icon: <FaReceipt className="text-yellow-500" />, value: InstructorsNames.join(', ') },
+                { label: 'Enrolled On', icon: <FaCalendarAlt className="text-blue-500" />, value: moment(enrolleddate).format('MMMM Do YYYY, h:mm a') }
+              ].map((item, idx) => (
+                <motion.div
+                  key={idx}
+                  className="flex items-center justify-between border-b py-3"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.1 * idx }}
+                >
+                  <span className="font-medium text-gray-700">{item.label}</span>
+                  <div className="flex items-center gap-2">
+                    {item.icon}
+                    <span className="text-gray-800">{item.value || 'N/A'}</span>
+                  </div>
+                </motion.div>
+              ))}
             </div>
 
-            <div className="max-w-3xl mx-auto p-6 bg-white rounded-lg shadow-lg mt-10" ref={contentRef}>
-                <h2 className="text-3xl font-bold text-center mb-8 text-orange-400">Payment Details</h2>
-
-                {/* Transaction ID */}
-                <div className="flex items-center justify-between border-b pb-4 mb-4">
-                    <h3 className="text-xl font-semibold text-gray-700">Transaction ID</h3>
-                    <div className="flex items-center gap-2">
-                        <FaRegListAlt className="text-blue-500" />
-                        <span>{transactionid}</span>
-                    </div>
+            {/* Chart */}
+            {chartData.length > 0 && (
+              <div className="p-6">
+                <h2 className="text-2xl font-semibold text-indigo-500 mb-4 flex items-center gap-2">
+                  <FaChartPie /> Price Distribution
+                </h2>
+                <div className="w-full h-64">
+                  <ResponsiveContainer>
+                    <PieChart>
+                      <Pie data={chartData} dataKey="value" cx="50%" cy="50%" outerRadius={80} label>
+                        {chartData.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                        ))}
+                      </Pie>
+                      <Tooltip />
+                      <Legend />
+                    </PieChart>
+                  </ResponsiveContainer>
                 </div>
-
-                {/* User Email */}
-                <div className="flex items-center justify-between border-b pb-4 mb-4">
-                    <h3 className="text-xl font-semibold text-gray-700">User Email</h3>
-                    <div className="flex items-center gap-2">
-                        <FaEnvelope className="text-red-500" />
-                        <span>{userEmail}</span>
-                    </div>
-                </div>
-
-                {/* User Name */}
-                <div className="flex items-center justify-between border-b pb-4 mb-4">
-                    <h3 className="text-xl font-semibold text-gray-700">User Name</h3>
-                    <div className="flex items-center gap-2">
-                        <FaRegListAlt className="text-blue-500" />
-                        <span>{userName}</span>
-                    </div>
-                </div>
-
-                {/* Total Price */}
-                <div className="flex items-center justify-between border-b pb-4 mb-4">
-                    <h3 className="text-xl font-semibold text-gray-700">Total Price</h3>
-                    <div className="flex items-center gap-2">
-                        <FaDollarSign className="text-green-500" />
-                        <span>{price} ৳</span>
-                    </div>
-                </div>
-
-                {/* Quantity */}
-                <div className="flex items-center justify-between border-b pb-4 mb-4">
-                    <h3 className="text-xl font-semibold text-gray-700">Quantity</h3>
-                    <div className="flex items-center gap-2">
-                        <FaClipboardCheck className="text-purple-500" />
-                        <span>{quantity}</span>
-                    </div>
-                </div>
-
-                {/* Packages Names */}
-                <div className="flex items-center justify-between border-b pb-4 mb-4">
-                    <h3 className="text-xl font-semibold text-gray-700">Packages</h3>
-                    <div className="flex items-center gap-2">
-                        <FaReceipt className="text-yellow-500" />
-                        <span>{PackagesNames?.join(', ')}</span>
-                    </div>
-                </div>
-
-                {/* Instructors Names */}
-                <div className="flex items-center justify-between border-b pb-4 mb-4">
-                    <h3 className="text-xl font-semibold text-gray-700">Instructors</h3>
-                    <div className="flex items-center gap-2">
-                        <FaReceipt className="text-yellow-500" />
-                        <span>{InstructorsNames?.join(', ')}</span>
-                    </div>
-                </div>
-
-                {/* Selected Packages ID */}
-                <div className="flex items-center justify-between border-b pb-4 mb-4">
-                    <h3 className="text-xl font-semibold text-gray-700">date:</h3>
-                    <div className="flex items-center gap-2">
-                        <FaRegListAlt className="text-blue-500" />
-                        <span>{moment(enrolleddate).format('MMMM Do YYYY, h:mm a')}</span>
-                    </div>
-                </div>
-            </div>
-
-            <button
-                onClick={convertToPdf}
-                className="bg-blue-500 text-white px-4 py-2 mt-4 mb-5 mx-auto block rounded-lg shadow-lg hover:bg-blue-700 transition"
-            >
-                Download as PDF
-            </button>
+              </div>
+            )}
+          </motion.div>
         </div>
-    );
-};
 
-export default Paymentdetails;
+        {/* Download Button (excluded from ref) */}
+        <motion.button
+          onClick={convertToPdf}
+          whileHover={{ scale: 1.05 }}
+          className="mt-6 bg-blue-500 text-white px-6 py-3 rounded-lg shadow-lg mx-auto block hover:bg-blue-600 transition"
+        >
+          Download as PDF
+        </motion.button>
+      </div>
+    </motion.div>
+  );
+}

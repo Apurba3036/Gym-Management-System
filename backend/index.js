@@ -240,6 +240,8 @@ app.get('/singlepackage/:id', async (req, res) => {
                         name: updatedPackage.name,
                         description: updatedPackage.description,
                         price: parseFloat(updatedPackage.price),
+                        instructorName: updatedPackage.instructorName,
+                        instructorEmail: updatedPackage.instructorEmail,
                         availableSeats: parseInt(updatedPackage.availableSeats),
                         videoLink: updatedPackage.videoLink,
                         finishedDate:updatedPackage.finishedDate,
@@ -682,44 +684,49 @@ app.get('/allpayments', async (req, res) => {
           });  
 
 
-        app.get('/popular-instructors', async (req, res) => {
-            const pipeline = [
-                {
-                    $group: {
-                        _id: "$instructorEmail",
-                        totalEnrolled: { $sum: "$totalEnrolled" },
-                    }
+       app.get('/popular-instructors', async (req, res) => {
+    const pipeline = [
+        {
+            $group: {
+                _id: "$instructorEmail",
+                totalEnrolled: { $sum: "$totalEnrolled" },
+            }
+        },
+        {
+            $lookup: {
+                from: "users",
+                localField: "_id",
+                foreignField: "email",
+                as: "instructor"
+            }
+        },
+        // Add this stage to filter out entries with no matching instructor
+        {
+            $match: {
+                "instructor.0": { $exists: true }
+            }
+        },
+        {
+            $project: {
+                _id: 0,
+                instructor: {
+                    $arrayElemAt: ["$instructor", 0]
                 },
-                {
-                    $lookup: {
-                        from: "users",
-                        localField: "_id",
-                        foreignField: "email",
-                        as: "instructor"
-                    }
-                },
-                {
-                    $project: {
-                        _id: 0,
-                        instructor: {
-                            $arrayElemAt: ["$instructor", 0]
-                        },
-                        totalEnrolled: 1
-                    }
-                },
-                {
-                    $sort: {
-                        totalEnrolled: -1
-                    }
-                },
-                {
-                    $limit: 6
-                }
-            ]
-            const result = await PackagesCollection.aggregate(pipeline).toArray();
-            res.send(result);
-
-        })
+                totalEnrolled: 1
+            }
+        },
+        {
+            $sort: {
+                totalEnrolled: -1
+            }
+        },
+        {
+            $limit: 6
+        }
+    ]
+    const result = await PackagesCollection.aggregate(pipeline).toArray();
+    res.send(result);
+})
 
         // Admins stats 
         app.get('/admin-stats', verifyJWT, verifyAdmin, async (req, res) => {

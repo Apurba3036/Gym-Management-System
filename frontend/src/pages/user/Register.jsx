@@ -10,7 +10,7 @@ import { HiOutlineLocationMarker } from 'react-icons/hi';
 import GoogleLogin from '../../components/Social/GoogleLogin';
 
 const Register = () => {
-    useTitle('Register | Workout Master - Unleashed Your Inner Self');
+    useTitle('Register | BacBon Gym Centers- Unleashed Your Inner Self');
     const { signUp, error, setError, updateUser } = useContext(AuthContext);
     const navigate = useNavigate();
     const {

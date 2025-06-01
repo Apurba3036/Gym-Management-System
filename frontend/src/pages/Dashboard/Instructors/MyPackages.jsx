@@ -1,95 +1,128 @@
 import React, { useEffect, useState } from 'react';
 import useAxiosSecure from '../../../hooks/useAxiosSecure';
 import { useUser } from '../../../hooks/useUser';
-import { Fade, Slide } from "react-awesome-reveal";
-import moment from 'moment'
+import moment from 'moment';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
+import { motion } from 'framer-motion';
+import { FaEye, FaUserGraduate, FaEdit } from 'react-icons/fa';
 
 const MyPackages = () => {
-    const [Packages, setPackages] = useState([]);
-    const { currentUser, isLoading } = useUser();
-    const navigate = useNavigate();
-    const axiosSecure = useAxiosSecure();
-    useEffect(() => {
-        axiosSecure.get(`/Packages/${currentUser?.email}`)
-            .then(res => setPackages(res.data))
-            .catch(err => console.log(err))
-    }, [isLoading])
+  const [Packages, setPackages] = useState([]);
+  const { currentUser, isLoading } = useUser();
+  const navigate = useNavigate();
+  const axiosSecure = useAxiosSecure();
 
-
-
-
-
-
-    const handleFeedback = (id) => {
-        const thePackage = Packages.find(pac => pac._id === id);
-        if (thePackage.reason) {
-            Swal.fire(
-                'Reason For Rejected',
-                thePackage.reason,
-                'info'
-            )
-        }
-        else {
-            Swal.fire(
-                'Wow Looks Good',
-                'Your package is approved',
-                'success'
-            )
-        }
+  useEffect(() => {
+    if (!isLoading) {
+      axiosSecure.get(`/Packages/${currentUser?.email}`)
+        .then(res => setPackages(res.data))
+        .catch(err => console.log(err));
     }
+  }, [isLoading]);
 
-    return (
-        <div>
-            <div className="my-9">
-                <h1 className='text-4xl font-bold text-center '>My <span className='text-secondary'>Package</span></h1>
-                <div className="text-center">
+  const handleFeedback = (id) => {
+    const thePackage = Packages.find(pac => pac._id === id);
+    if (thePackage.reason) {
+      Swal.fire('Reason For Rejected', thePackage.reason, 'info');
+    } else {
+      Swal.fire('Wow Looks Good', 'Your package is approved', 'success');
+    }
+  };
 
-                    <Fade duration={100} className='text-[12px]  text-center' cascade>Here you can see all your Packages and information</Fade>
-                </div>
+  
 
+  return (
+    <div className="my-10 px-4 md:px-10">
+      <motion.h1
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="text-4xl font-bold text-center text-gray-800"
+      >
+        My <span className="text-secondary">Courses</span>
+      </motion.h1>
+      <motion.p
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.2 }}
+        className="text-center text-sm mt-2 text-gray-500"
+      >
+        View all your submitted packages and related details here
+      </motion.p>
 
-                <div className="">
-                    {
-                        Packages.length === 0 ? <div className='text-center text-2xl font-bold mt-10'>You have not added any Package yet</div> :
-                            <div className="mt-9">
-                                {
-                                    Packages.map((Pac, index) => <Slide duration={1000} key={index} className='mb-5 hover:ring ring-secondary duration-200 focus:ring rounded-lg'>
-                                        <div className="bg-white flex  rounded-lg gap-8  shadow p-4">
-                                            <div className="">
-                                                <img className='max-h-[200px] max-w-[300px]' src={Pac.image} alt="" />
-                                            </div>
-                                            <div className="w-full">
-                                                <h1 className='text-[21px] font-bold text-secondary border-b pb-2 mb-2'>{Pac.name}</h1>
-                                                <div className="flex gap-5">
-                                                    <div className="">
-                                                        <h1 className='font-bold mb-3'>Some Info : </h1>
-                                                        <h1 className='text-secondary my-2'><span className='text-black '>Total Student</span> : {Pac.totalEnrolled ? Pac.totalEnrolled : 0}</h1>
-                                                        <h1 className='text-secondary'><span className='text-black '>Total Seats</span> : {Pac.availableSeats}</h1>
-                                                        <h1 className='text-secondary my-2'><span className='text-black '>Status</span> : <span className={`font-bold ${Pac.status === 'pending' ? 'text-orange-400' : Pac.status === 'checking' ? 'text-yellow-300' : Pac.status === 'approved' ? 'text-green-500' : 'text-red-600'}`}>{Pac.status}</span></h1>
-                                                    </div>
-                                                    <div className="">
-                                                        <h1 className='font-bold mb-3'>.....</h1>
-                                                        <h1 className='text-secondary my-2'><span className='text-black '>Price</span> : {Pac.price} <span className='text-black'>৳</span></h1>
-                                                        <h1 className='text-secondary my-2'><span className='text-black '>Submitted</span> : <span className=''>{Pac.submitted ? moment(Pac.submitted).format('MMMM Do YYYY') : 'Not Get Data'}</span></h1>
-                                                    </div>
-                                                    <div className="w-1/3">
-                                                        <h1 className='font-bold mb-3'>Action : </h1>
-                                                        <button onClick={() => handleFeedback(Pac._id)} className='px-3 bg-orange-400 font-bold  py-1 text-white w-full rounded-lg'>View Feedback</button>
-                                                        <button onClick={()=>navigate(`/dashboard/view/${Pac._id}`)} className='px-3 bg-green-500 font-bold  py-1 text-white w-full my-3 rounded-lg'>View Students</button>
-                                                        <button className='px-3 bg-secondary font-bold  py-1 text-white w-full rounded-lg' onClick={() => navigate(`/dashboard/update/${Pac._id}`)}>Update</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </Slide>)}
-                            </div>
-                    }
-                </div>
-            </div>
+      {Packages.length === 0 ? (
+        <div className="text-center text-xl font-semibold mt-16 text-gray-600">
+          You have not added any package yet.
         </div>
-    );
+      ) : (
+        <div className="mt-10 space-y-6">
+          {Packages.map((Pac, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.1 }}
+              className="flex flex-col md:flex-row items-center bg-white shadow-xl rounded-xl overflow-hidden hover:ring-2 ring-secondary transition duration-300"
+            >
+              <img
+                className="w-full md:w-60 h-60 object-cover"
+                src={Pac.image}
+                alt={Pac.name}
+              />
+              <div className="flex-1 p-6 w-full">
+                <h2 className="text-xl font-bold text-secondary border-b pb-2 mb-4">
+                  {Pac.name}
+                </h2>
+                <div className="flex flex-col md:flex-row justify-between text-sm">
+                  <div>
+                    <p><span className="font-semibold text-gray-700">Total Students:</span> {Pac.totalEnrolled || 0}</p>
+                    <p><span className="font-semibold text-gray-700">Total Seats:</span> {Pac.availableSeats}</p>
+                    <p>
+                      <span className="font-semibold text-gray-700">Status:</span>{' '}
+                      <span className={`font-bold ${
+                        Pac.status === 'pending' ? 'text-yellow-500' :
+                        Pac.status === 'checking' ? 'text-yellow-400' :
+                        Pac.status === 'approved' ? 'text-green-600' : 'text-red-600'
+                      }`}>
+                        {Pac.status}
+                      </span>
+                    </p>
+                  </div>
+                  <div className="mt-4 md:mt-0">
+                    <p><span className="font-semibold text-gray-700">Price:</span> {Pac.price}৳</p>
+                    <p>
+                      <span className="font-semibold text-gray-700">Submitted:</span>{' '}
+                      {Pac.submitted ? moment(Pac.submitted).format('MMMM Do YYYY') : 'Not Available'}
+                    </p>
+                  </div>
+                  <div className="mt-4 md:mt-0 space-y-2">
+                    <button
+                      onClick={() => handleFeedback(Pac._id)}
+                      className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-orange-400 text-white rounded-lg hover:bg-orange-500 transition"
+                    >
+                      <FaEye /> View Feedback
+                    </button>
+                    <button
+                      onClick={() => navigate(`/dashboard/view/${Pac._id}`)}
+                      className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition"
+                    >
+                      <FaUserGraduate /> View Students
+                    </button>
+                    <button
+                      onClick={() => navigate(`/dashboard/update/${Pac._id}`)}
+                      className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-secondary text-white rounded-lg hover:bg-primary transition"
+                    >
+                      <FaEdit /> Update
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
 };
 
 export default MyPackages;

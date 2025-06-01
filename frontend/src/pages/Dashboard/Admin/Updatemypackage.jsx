@@ -23,7 +23,9 @@ const Updatemypackage = () => {
                 console.error('Error fetching package data:', err);
             });
     }, [id, axiosSecure]);
+    
     console.log(packageData);
+    
     const handleFormSubmit = (e) => {
         e.preventDefault();
         const formData = new FormData(e.target);
@@ -31,12 +33,13 @@ const Updatemypackage = () => {
 
         if (image) {
             // Upload the new image if one is provided
-            formData.append('file', image);
+            const imageFormData = new FormData();
+            imageFormData.append('image', image);
 
             toast.promise(
                 fetch(API_URL, {
                     method: 'POST',
-                    body: formData
+                    body: imageFormData
                 })
                     .then(res => res.json())
                     .then(data => {
@@ -112,7 +115,6 @@ const Updatemypackage = () => {
                 </div>
 
                 <div className="">
-
                     <div className="grid gap-3 grid-cols-2">
                         <div className="mb-6">
                             <label className="block text-gray-700 font-bold mb-2" htmlFor="instructorName">
@@ -121,6 +123,7 @@ const Updatemypackage = () => {
                             <input
                                 className="w-full px-4 py-2 border border-secondary rounded-md focus:outline-none focus:ring-blue-500"
                                 type="text"
+                                required
                                 placeholder="Instructor Name"
                                 name="instructorName"
                                 defaultValue={packageData?.instructorName || ''}
@@ -133,9 +136,9 @@ const Updatemypackage = () => {
                             <input
                                 className="w-full px-4 py-2 border border-secondary rounded-md focus:outline-none focus:ring-blue-500"
                                 type="email"
-                             
+                                required
                                 name="instructorEmail"
-                                value={packageData?.instructorEmail || currentUser?.email}
+                                defaultValue={packageData?.instructorEmail || currentUser?.email || ''}
                             />
                         </div>
                     </div>
@@ -177,10 +180,9 @@ const Updatemypackage = () => {
                             type="date"
                             required
                             name="finishedDate"
-                            defaultValue={packageData?.finishedDate || 0}
+                            defaultValue={packageData?.finishedDate || ''}
                         />
                     </div>
-
                 </div>
 
                 <div className="mb-6">

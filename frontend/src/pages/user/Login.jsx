@@ -8,7 +8,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const Login = () => {
-    useTitle('Login | Workout Master - Unleashed Your Inner Self');
+    useTitle('Login | BacBon Gym Center - Unleashed Your Inner Self');
     const location = useLocation();
     const [showPassword, setShowPassword] = useState(false);
     const { login, error, setError, loader, setLoader } = useAuth();

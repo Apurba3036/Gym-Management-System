@@ -12,7 +12,7 @@ import { Pagination, ThemeProvider, createTheme } from '@mui/material';
 import { ScaleLoader } from 'react-spinners';
 
 const SelectedPackage = () => {
-    useTitle('Selected Package | workout Master Selected Package');
+    useTitle('Selected Package | BacBon Gym Center Selected Package');
     const { currentUser } = useUser();
     const [loading, setLoading] = useState(true);
     const [Packages, setPackages] = useState([]);
@@ -174,7 +174,7 @@ const SelectedPackage = () => {
                                                                 <span className={`font-semibold whitespace-pre-wrap`}>{item.name}</span>
                                                             </div>
                                                         </td>
-                                                        <td className="py-4">${item.price}</td>
+                                                        <td className="py-4">৳{item.price}</td>
                                                         <td className="py-4">
                                                             <p className='text-green-700 text-sm'>{moment(item.submitted).format('MMMM Do YYYY')}</p>
                                                         </td>
@@ -213,7 +213,7 @@ const SelectedPackage = () => {
                                 <h2 className="text-lg font-semibold mb-4">Summary</h2>
                                 <div className="flex justify-between mb-2">
                                     <span>Subtotal</span>
-                                    <span>${totalPrice}</span>
+                                    <span>৳{totalPrice}</span>
                                 </div>
                                 <div className="flex justify-between mb-2">
                                     <span>Taxes</span>
@@ -228,7 +228,7 @@ const SelectedPackage = () => {
                                 <hr className="my-2" />
                                 <div className="flex justify-between mb-2">
                                     <span className="font-semibold">Total</span>
-                                    <span className="font-semibold">${price.toFixed(2)}</span>
+                                    <span className="font-semibold">৳{price.toFixed(2)}</span>
                                 </div>
                                 <motion.button
                                     whileHover={{ scale: 1.1 }}

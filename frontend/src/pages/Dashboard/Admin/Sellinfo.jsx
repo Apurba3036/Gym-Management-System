@@ -73,7 +73,7 @@ const Sellinfo= () => {
             <div>
                 <div className="">
                     <h1 className='font-bold'>Total Payments: {payments.length}</h1>
-                    <h1 className='font-bold'>Total Paid: {totalPaidAmount}</h1>
+                    <h1 className='font-bold'>Total Paid: {totalPaidAmount}৳</h1>
                 </div>
                 <div className="flex flex-col">
                     <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">

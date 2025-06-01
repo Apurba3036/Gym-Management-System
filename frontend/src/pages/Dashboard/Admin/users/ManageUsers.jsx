@@ -115,7 +115,7 @@ const ManageUsers = () => {
                                                 className="border-b transition duration-300 ease-in-out hover:bg-neutral-100 dark:border-neutral-500 dark:hover:bg-neutral-600">
                                                 <td className="whitespace-nowrap px-6 py-4 font-medium">{idx + 1}</td>
                                                 <td className="whitespace-nowrap px-6 py-4">
-                                                    <img src={user.photoUrl} className='h-[35px] w-[35px]' alt="" />
+                                                    <img src={user.photoUrl || "https://icons.veryicon.com/png/o/miscellaneous/two-color-icon-library/user-286.png"} className='h-[35px] w-[35px]' alt="" />
                                                 </td>
                                                 <td className="whitespace-nowrap px-6 py-4">{user.name}</td>
                                                 <td className="whitespace-nowrap px-6 py-4">{user.role}</td>
